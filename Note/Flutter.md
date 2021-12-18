@@ -14,3 +14,20 @@ Widget渲染过程:  Flutter会结构化地组织视图数据, 提供渲染引�
 1. 通过`Widget`树生成对应的`Element`树.
 2. 创建相应的 `RenderObject` 并关联到 `Element.renderObject` 属性上.
 3. 构建成 `RenderObject` 树，以完成最终的渲染。
+
+## StatelessWidget 和 StatefulWidget
+Flutter视图开发使用`声明式`UI编程范式, 其核心设计思想就是将视图和数据分离, 与React的设计思路一致. 与传统命令式iOS视图开发(非SwiftUI)区别在于, 命令式编程强调精确控制过程细节, 而声明式编程强调通过意图输出结果整体. 例如传统的通过操作dom开发和Vue开发的区别.
+
+`StatelessWidget`: 在创建时, 处理配置参数外不依赖其他任何信息. 一旦创建成功就不关心也不响应任何数据变化进行重绘.
+
+`StatefulWidget`: 创建完成后, 需要关心和相应数据的变化来进行重绘.
+
+`StatefulWidget`是以 `State` 类代理 Widget 构建的设计方式实现的, 由其负责视图的构建. 
+
+**注意点: **
+
+* 需要合理使用`StatefulWidget` 和 `StatefulWidget`，滥用`StatefulWidget`会直接影响 `Flutter` 应用的渲染性能。`Widget` 是不可变的，更新则意味着销毁 + 重建（build）。
+`StatelessWidget` 是静态的，一旦创建则无需更新；而对于 `StatefulWidget` 来说，在 `State` 类中调用 `setState` 方法更新数据，会触发视图的销毁和重建，也将间接地触发其每个子 Widget 的销毁和重建。 尽管 `Flutter` 会通过 `Element` 层去最大程度降低对真实渲染视图的修改，但大量的 `Widget` 销毁重建无法避免，因此避免 `StatefulWidget` 的滥用，是最简单、直接地提升应用渲染性能的手段。
+
+* 由于 Widget 采用由父到子、自顶向下的方式进行构建，因此在自定义组件时，我们可以根据父 Widget 是否能通过初始化参数完全控制其 UI 展示效果的基本原则，来判断究竟是继承 `StatelessWidget` 还是 `StatefulWidget`。
+* 除了我们主动地通过 `State` 刷新 UI 之外，在一些特殊场景下，`Widget` 的 `build` 方法有可能会执行多次。因此，我们不应该在这个方法内部，放置太多有耗时的操作。
