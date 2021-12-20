@@ -1,6 +1,7 @@
 # Dart笔记
 
 > [Dart官方文档](https://dart.dev/tutorials)
+> [Dart中文文档](https://dart.cn/tutorials)
 
 ## 基础语法与变量类型
 
